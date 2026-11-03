@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>របាយការណ៍សង្ខេបបម្រែបម្រួលប្រជាសាស្ត្រ និងទំនាក់ទំនងរវាងប្រជាជន និងអភិវឌ្ឍន៍ ខេត្តកំពង់ស្ពឺ</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js for Data Visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Khmer -->
+    <link href="https://fonts.googleapis.com/css2?family=Kanten:wght@400;700&family=Kantumruy+Pro:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#0284c7',
+                            600: '#0369a1',
+                            700: '#075985',
+                            800: '#0c4a6e',
+                            900: '#0a3651',
+                        },
+                        accent: {
+                            500: '#f59e0b',
+                            600: '#d97706',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Kantumruy Pro', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Kantumruy Pro', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        .nav-item.active {
+            background-color: #0369a1;
+            color: #ffffff;
+            font-weight: 600;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Header Navigation (Stays visible across all page switches) -->
+    <header class="sticky top-0 z-50 bg-brand-900 text-white shadow-lg border-b border-brand-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo & Title Header -->
+                <div class="flex items-center space-x-3 space-x-reverse cursor-pointer" onclick="switchTab('home')">
+                    <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center border-2 border-brand-500 shadow-inner">
+                        <i class="fa-solid font-bold text-2xl text-accent-500 fa-chart-line"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg md:text-xl font-bold leading-tight tracking-wide text-white">ប្រព័ន្ធទិន្នន័យប្រជាសាស្ត្រ</h1>
+                        <p class="text-xs text-brand-100 font-light">ខេត្តកំពង់ស្ពឺ • របាយការណ៍អភិវឌ្ឍន៍</p>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation Menu -->
+        <nav class="hidden md:flex space-x-1 space-x-reverse">
+            <button onclick="switchTab('home')" id="nav-home" class="nav-item px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-brand-600 hover:text-white text-gray-200 flex items-center gap-2">
+                <i class="fa-solid fa-house"></i> ទំព័រដើម
+            </button>
+            <button onclick="switchTab('commune')" id="nav-commune" class="nav-item px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-brand-600 hover:text-white text-gray-200 flex items-center gap-2">
+                <i class="fa-solid fa-map-location-dot"></i> ព័ត៌មានឃុំ/សង្កាត់
+            </button>
+            <button onclick="switchTab('health')" id="nav-health" class="nav-item px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-brand-600 hover:text-white text-gray-200 flex items-center gap-2">
+                <i class="fa-solid fa-heart-pulse"></i> សុខាភិបាល
+            </button>
+            <button onclick="switchTab('education')" id="nav-education" class="nav-item px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-brand-600 hover:text-white text-gray-200 flex items-center gap-2">
+                <i class="fa-solid fa-graduation-cap"></i> អប់រំ
+            </button>
+            <button onclick="switchTab('migration')" id="nav-migration" class="nav-item px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-brand-600 hover:text-white text-gray-200 flex items-center gap-2">
+                <i class="fa-solid fa-people-arrows"></i> ចំណាកស្រុក
+            </button>
+            <button onclick="switchTab('poverty')" id="nav-poverty" class="nav-item px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-brand-600 hover:text-white text-gray-200 flex items-center gap-2">
+                <i class="fa-solid fa-hand-holding-dollar"></i> ទិន្នន័យភាពក្រីក្រ
+            </button>
+        </nav>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button type="button" onclick="toggleMobileMenu()" class="text-white hover:text-accent-500 focus:outline-none p-2">
+                        <i id="menu-icon" class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-brand-800 border-t border-brand-700 px-4 pt-2 pb-4 space-y-1">
+            <button onclick="switchTab('home')" class="w-full text-left px-3 py-2 rounded-md text-base font-medium text-white hover:bg-brand-700 flex items-center gap-3">
+                <i class="fa-solid fa-house text-accent-500"></i> ទំព័រដើម
+            </button>
+            <button onclick="switchTab('commune')" class="w-full text-left px-3 py-2 rounded-md text-base font-medium text-white hover:bg-brand-700 flex items-center gap-3">
+                <i class="fa-solid fa-map-location-dot text-accent-500"></i> ព័ត៌មានឃុំ/សង្កាត់
+            </button>
+            <button onclick="switchTab('health')" class="w-full text-left px-3 py-2 rounded-md text-base font-medium text-white hover:bg-brand-700 flex items-center gap-3">
+                <i class="fa-solid fa-heart-pulse text-accent-500"></i> សុខាភិបាល
+            </button>
+            <button onclick="switchTab('education')" class="w-full text-left px-3 py-2 rounded-md text-base font-medium text-white hover:bg-brand-700 flex items-center gap-3">
+                <i class="fa-solid fa-graduation-cap text-accent-500"></i> អប់រំ
+            </button>
+            <button onclick="switchTab('migration')" class="w-full text-left px-3 py-2 rounded-md text-base font-medium text-white hover:bg-brand-700 flex items-center gap-3">
+                <i class="fa-solid fa-people-arrows text-accent-500"></i> ចំណាកស្រុក
+            </button>
+            <button onclick="switchTab('poverty')" class="w-full text-left px-3 py-2 rounded-md text-base font-medium text-white hover:bg-brand-700 flex items-center gap-3">
+                <i class="fa-solid fa-hand-holding-dollar text-accent-500"></i> ទិន្នន័យភាពក្រីក្រ
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Dynamic Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- SECTION 1: ទំព័រដើម (HOME) -->
+        <section id="section-home" class="page-content space-y-8">
+            <!-- Hero Banner -->
+            <div class="relative rounded-2xl overflow-hidden shadow-xl bg-gradient-to-r from-brand-900 via-brand-800 to-brand-900 text-white p-8 md:p-12">
+                <div class="absolute inset-0 opacity-20 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1544644181-1484b3fdfc62?auto=format&fit=crop&w=1200&q=80');"></div>
+                <div class="relative z-10 max-w-3xl">
+                    <span class="px-3 py-1 bg-accent-500 text-brand-900 rounded-full text-xs font-bold uppercase tracking-wider mb-4 inline-block">របាយការណ៍យុទ្ធសាស្ត្រ ឆ្នាំ២០២៤-២០២៥</span>
+                    <h2 class="text-2xl md:text-4xl font-bold leading-relaxed mb-4">របាយការណ៍សង្ខេបបម្រែបម្រួលប្រជាសាស្ត្រ និងទំនាក់ទំនងរវាងប្រជាជន និងអភិវឌ្ឍន៍ ក្នុងខេត្តកំពង់ស្ពឺ</h2>
+                    <p class="text-brand-100 text-base md:text-lg mb-6 leading-relaxed">
+                        ការសិក្សា និងវិភាគស៊ីជម្រៅអំពីនិន្នាការប្រជាសាស្ត្រ សុខុមាលភាពសង្គម ការអប់រំ និងសេដ្ឋកិច្ច ដើម្បីគាំទ្រដល់ការរៀបចំផែនការអភិវឌ្ឍន៍ខេត្តប្រកបដោយចីរភាព។
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <button onclick="switchTab('commune')" class="bg-accent-500 hover:bg-accent-600 text-brand-900 font-bold px-6 py-3 rounded-lg shadow-md transition-colors flex items-center gap-2">
+                            <span>ពិនិត្យទិន្នន័យតាមក្រុង-ស្រុក</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Key Indicators Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-sm font-semibold text-gray-500">ប្រជាជនសរុប (២០២៥)</span>
+                    <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-brand-600">
+                        <i class="fa-solid fa-users text-lg"></i>
+                    </div>
+                </div>
+                <p class="text-3xl font-bold text-gray-900">៩៨០,៤៦៩</p>
+                <p class="text-xs text-green-600 mt-2 flex items-center gap-1 font-medium">
+                    <i class="fa-solid fa-venus-mars"></i> ប្រុស: ៤៧៧,៦៩២ | ស្រី: ៥០២,៧៧៧
+                </p>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-sm font-semibold text-gray-500">គ្រួសារសរុប (២០២៥)</span>
+                    <div class="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center text-amber-600">
+                        <i class="fa-solid fa-house-user text-lg"></i>
+                    </div>
+                </div>
+                <p class="text-3xl font-bold text-gray-900">២២១,១៨៨</p>
+                <p class="text-xs text-brand-600 mt-2 flex items-center gap-1 font-medium">
+                    <i class="fa-solid fa-book"></i> តាមសៀវភៅគ្រួសារ
+                </p>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-sm font-semibold text-gray-500">ចំនួនឃុំ/សង្កាត់</span>
+                    <div class="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600">
+                        <i class="fa-solid fa-building-flag text-lg"></i>
+                    </div>
+                </div>
+                <p class="text-3xl font-bold text-gray-900">៨៨</p>
+                <p class="text-xs text-gray-500 mt-2 flex items-center gap-1 font-medium">
+                    <i class="fa-solid fa-location-dot"></i> ក្នុង ២ ក្រុង និង ៧ ស្រុក
+                </p>
+            </div>
+<!-- ... existing code -->
+    <script>
+        // Store instances of Chart.js objects to enable proper clean-up before re-rendering
+        const chartInstances = {};
+
+        // Official Administrative & Demographic Data for Kampong Speu (Total: 88 Communes/Sangkats, 1378 Villages, Total Population: 980,469 [M: 477,692, F: 502,777], Total Households: 221,188)
+        const communeData = [
+            { district: 'ក្រុងច្បារមន', communes: 5, villages: 56, population: 68600, male: 33400, female: 35200, households: 15470 },
+            { district: 'ក្រុងឧដុង្គម៉ែជ័យ', communes: 5, villages: 95, population: 77860, male: 37900, female: 39960, households: 17560 },
+            { district: 'ស្រុកសំរោងទង', communes: 15, villages: 242, population: 191600, male: 93300, female: 98300, households: 43230 },
+            { district: 'ស្រុកគងពិសី', communes: 13, villages: 235, population: 158700, male: 77300, female: 81400, households: 35780 },
+            { district: 'ស្រុកភ្នំស្រួច', communes: 12, villages: 140, population: 106300, male: 51900, female: 54400, households: 23970 },
+            { district: 'ស្រុកបរសេដ្ឋ', communes: 15, villages: 212, population: 187400, male: 91400, female: 96000, households: 42280 },
+            { district: 'ស្រុកឱរ៉ាល់', communes: 5, villages: 70, population: 46700, male: 22800, female: 23900, households: 10530 },
+            { district: 'ស្រុកថ្ពង', communes: 8, villages: 82, population: 58700, male: 28600, female: 30100, households: 13230 },
+            { district: 'ស្រុកសាមគ្គីមុនីជ័យ', communes: 10, villages: 146, population: 84609, male: 41092, female: 43517, households: 19138 }
+        ];
+
+        // Clean-up logic: Destroys chart if it already exists to avoid memory leak & graphic overlap
+        function destroyChartIfExists(chartId) {
+            if (chartInstances[chartId]) {
+                chartInstances[chartId].destroy();
+                delete chartInstances[chartId];
+            }
+        }
+<!-- ... existing code -->
